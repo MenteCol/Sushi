@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{5217e3e5-7f79-4aa4-82c7-0e566daf5125}">
+		<property name="assetPath">
+			<value>Player/SFX_Player_steps_Cloth_03.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>1.1962585034013606</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{1908aab1-1e34-43a0-8d9a-889d86455d67}</destination>
+		</relationship>
+	</object>
+</objects>

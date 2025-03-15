@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{b579f502-b87a-4b3a-983e-8e7082763f62}">
+		<property name="assetPath">
+			<value>Tools/SFX_Player_shield_04.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>0.65061224489795921</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{1908aab1-1e34-43a0-8d9a-889d86455d67}</destination>
+		</relationship>
+	</object>
+</objects>

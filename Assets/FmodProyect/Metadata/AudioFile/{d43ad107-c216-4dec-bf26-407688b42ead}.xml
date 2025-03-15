@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{d43ad107-c216-4dec-bf26-407688b42ead}">
+		<property name="assetPath">
+			<value>Player/SFX_Player_Roll_WetCloth_04.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>0.3399546485260771</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{1908aab1-1e34-43a0-8d9a-889d86455d67}</destination>
+		</relationship>
+	</object>
+</objects>

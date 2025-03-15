@@ -1,0 +1,107 @@
+/* === Estilo General === */
+/* Estilo general para los botones */
+.button {
+    background-color: #FFAAAA;
+    border-radius: 5px;
+    padding: 10px;
+    -unity-text-align: middle-center;
+}
+
+/* Etiquetas generales */
+.label {
+    color: #333333;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+/* Botones de título */
+.boton-titulo {
+    background-color: rgba(50, 205, 50, 0.5); /* Verde translúcido */
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 14px;
+    height: auto;
+    -unity-text-align: middle-center;
+    margin-bottom: 5px;
+}
+
+/* Contenedor dinámico */
+.dynamic-fields-container {
+    margin-top: 5px;
+}
+
+/* === Contenedores === */
+/* Contenedor general para los eventos */
+.lista-eventos-container {
+    border: 2px solid rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+    padding: 10px;
+    background-color: rgba(0, 0, 50, 0.4); /* Fondo azul translúcido */
+    margin-bottom: 20px;
+}
+
+/* Contenedor para cada elemento */
+.evento-item-container {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* === Estilo de Categorías === */
+/* Estilo para Música */
+.evento-item-musica {
+    background-color: rgba(150, 20, 80, 0.2);
+    border-color: rgba(150, 20, 80, 0.4);
+}
+
+/* Estilo para SFX */
+.evento-item-sfx {
+    background-color: rgba(30, 100, 90, 0.4);
+    border-color: rgba(30, 100, 90, 0.8);
+}
+
+/* Estilo para Ambiente */
+.evento-item-ambiente {
+    background-color: rgba(70, 130, 180, 0.4);
+    border-color: rgba(70, 130, 180, 1);
+}
+
+/* Estilo para Personajes */
+.evento-item-personajes {
+    background-color: rgba(255, 200, 100, 0.4);
+    border-color: rgba(255, 200, 100, 0.8);
+}
+
+/* Estilo para NPCS */
+.evento-item-npcs {
+    background-color: rgba(150, 100, 255, 0.4);
+    border-color: rgba(150, 100, 255, 0.8);
+}
+
+/* Estilo para Enemigos */
+.evento-item-enemigos {
+    background-color: rgba(255, 50, 50, 0.4);
+    border-color: rgba(255, 50, 50, 0.8);
+}
+
+/* Estilo para Jefes */
+.evento-item-jefes {
+    background-color: rgba(100, 255, 100, 0.4);
+    border-color: rgba(100, 255, 100, 0.8);
+}
+
+/* === Desplegables === */
+/* Estilo general para Foldout */
+.evento-foldout {
+    background-color: rgba(50, 50, 50, 0.5);
+    border: 1px solid rgba(100, 100, 100, 0.8);
+    border-radius: 5px;
+    padding: 3px;
+}
+
+/* Contenido del Foldout */
+.evento-foldout__content {
+    padding-left: 10px;
+}

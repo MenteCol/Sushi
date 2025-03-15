@@ -1,0 +1,282 @@
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
+using UnityEditor.UIElements;
+using UnityEngine.UIElements;
+
+[CustomEditor(typeof(AudioImp))]
+public class AudioImpEditor : Editor
+{
+    private VisualElement datosContainer;
+    private TextField nombreField;
+    private DropdownField metodoDeReproduccionDropdown;
+    private DropdownField eventosDropdown;
+    private Button agregarButton;
+    private ScrollView listaEventosContainer;
+    private VisualElement listaContainer; // Nueva referencia
+    private Toggle startToggle;
+    private ObjectField gameobjectField;
+
+    private DropdownField tipoDropdown;
+    private DropdownField verTipoDropdown;
+
+    private Dictionary<string, List<string>> configuracionMetodos;
+
+
+    public override VisualElement CreateInspectorGUI()
+    {
+        var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/AudioImpInterfaz.uxml");
+        VisualElement root = visualTree.CloneTree();
+
+        var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/AudioImpStyle.uss");
+        root.styleSheets.Add(styleSheet);
+
+        datosContainer = root.Q<VisualElement>("Datos");
+
+        tipoDropdown = root.Q<DropdownField>("tipoDrop");
+        tipoDropdown.choices = AudioImp.TiposEvento;
+
+        verTipoDropdown = root.Q<DropdownField>("verTipo");
+        verTipoDropdown.choices = AudioImp.TiposEvento;
+        verTipoDropdown.value = "Música"; // Mostrar música por defecto
+        verTipoDropdown.RegisterValueChangedCallback(evt =>
+        {
+            ActualizarListaEventosFiltrada(evt.newValue);
+        });
+
+        nombreField = root.Q<TextField>("nombreElegido");
+        metodoDeReproduccionDropdown = root.Q<DropdownField>("metodosDropdown");
+        eventosDropdown = root.Q<DropdownField>("eventosDropdown");
+        listaEventosContainer = root.Q<ScrollView>("listaEventosContainer");
+        listaContainer = root.Q<VisualElement>("Lista"); // Referencia al contenedor principal
+
+        agregarButton = root.Q<Button>("agregarButton");
+        startToggle = root.Q<Toggle>("startToggle");
+        gameobjectField = root.Q<ObjectField>("object");
+
+        configuracionMetodos = FMODEvents.ObtenerConfiguracionMetodos();
+        metodoDeReproduccionDropdown.choices = new List<string>(configuracionMetodos.Keys);
+        ConfigurarEventosDropdown();
+
+        metodoDeReproduccionDropdown.RegisterValueChangedCallback(evt => ActualizarCamposVisibles(evt.newValue));
+        ActualizarCamposVisibles(metodoDeReproduccionDropdown.value);
+
+        agregarButton.clicked += AgregarEvento;
+
+        // Mostrar la lista inicial de música
+        ActualizarListaEventosFiltrada("Música");
+
+        // Añadir el texto "By: Qpa85"
+        Label citaLabel = new Label("By: Qpa85");
+        citaLabel.style.unityTextAlign = TextAnchor.MiddleRight;
+        citaLabel.style.fontSize = 10;
+        citaLabel.style.unityFontStyleAndWeight = FontStyle.Italic;
+        citaLabel.style.color = Color.gray;
+        citaLabel.style.marginTop = 10;
+        citaLabel.style.marginBottom = 5;
+        citaLabel.style.alignSelf = Align.FlexEnd;
+        root.Add(citaLabel);
+
+        return root;
+    }
+
+    private void ConfigurarEventosDropdown()
+    {
+        if (FMODEvents.instance == null)
+        {
+            var foundInstance = FindFirstObjectByType<FMODEvents>();
+            if (foundInstance != null)
+            {
+                FMODEvents.instance = foundInstance;
+            }
+        }
+
+        eventosDropdown.choices = FMODEvents.instance != null
+            ? FMODEvents.instance.ObtenerTodosLosEventos()
+            : new List<string> { "No hay eventos disponibles" };
+    }
+
+    private void ActualizarCamposVisibles(string metodoSeleccionado)
+    {
+        datosContainer.Clear();
+
+        datosContainer.Add(tipoDropdown);
+        datosContainer.Add(nombreField);
+        datosContainer.Add(eventosDropdown);
+        datosContainer.Add(metodoDeReproduccionDropdown);
+
+        bool agregarToggleAlFinal = false;
+
+        if (configuracionMetodos.ContainsKey(metodoSeleccionado))
+        {
+            foreach (var campo in configuracionMetodos[metodoSeleccionado])
+            {
+                switch (campo)
+                {
+                    case "transformField":
+                        datosContainer.Add(gameobjectField);
+                        break;
+                    case "startToggle":
+                        agregarToggleAlFinal = true;
+                        break;
+                }
+            }
+        }
+
+        if (agregarToggleAlFinal)
+        {
+            datosContainer.Add(startToggle);
+        }
+    }
+
+    private void AgregarEvento()
+    {
+        AudioImp audioImp = (AudioImp)target;
+
+        string nombre = nombreField.value;
+        string metodo = metodoDeReproduccionDropdown.value;
+        string evento = eventosDropdown.value;
+        string tipo = tipoDropdown.value;
+        GameObject transformSeleccionado = (GameObject)gameobjectField.value;
+        bool start = startToggle.value;
+
+        if (string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(evento))
+        {
+            Debug.LogWarning("Debes ingresar un nombre y seleccionar un evento.");
+            return;
+        }
+
+        if (!AudioImp.TiposEvento.Contains(tipo))
+        {
+            Debug.LogWarning($"El tipo seleccionado '{tipo}' no es válido.");
+            return;
+        }
+
+        if (audioImp.Eventos.Exists(e => e.NombreElegido == nombre))
+        {
+            Debug.LogWarning($"El nombre '{nombre}' ya existe. Usa otro nombre.");
+            return;
+        }
+
+        Evento nuevoEvento = new Evento
+        {
+            NombreElegido = nombre,
+            Metodo = metodo,
+            EventoFMOD = evento,
+            gameobject = transformSeleccionado,
+            start = start,
+            Tipo = tipo
+        };
+
+        audioImp.AgregarEvento(nuevoEvento);
+        EditorUtility.SetDirty(audioImp);
+
+        // Actualizar visibilidad y lista al agregar un nuevo evento
+        verTipoDropdown.value = tipo;
+        ActualizarListaEventosFiltrada(tipo);
+    }
+
+    private void ActualizarListaEventosFiltrada(string tipoSeleccionado)
+    {
+        listaEventosContainer.Clear();
+
+        AudioImp audioImp = (AudioImp)target;
+
+        // Filtra los eventos según el tipo seleccionado
+        List<Evento> eventosFiltrados = audioImp.ObtenerEventosPorTipo(tipoSeleccionado);
+
+        // Mostrar u ocultar el contenedor según haya o no eventos
+        listaEventosContainer.style.display = eventosFiltrados.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+
+        foreach (var evento in eventosFiltrados)
+        {
+            VisualElement eventoItem = new VisualElement();
+            eventoItem.AddToClassList("evento-item");
+
+            // Campo editable para Nombre
+            var nombreEditable = new TextField("Nombre") { value = evento.NombreElegido };
+            nombreEditable.RegisterValueChangedCallback(evt =>
+            {
+                evento.NombreElegido = evt.newValue;
+                EditorUtility.SetDirty(audioImp);
+            });
+            eventoItem.Add(nombreEditable);
+
+            // Dropdown editable para Método
+            var metodoEditable = new DropdownField("Método", new List<string>(configuracionMetodos.Keys), evento.Metodo);
+            metodoEditable.RegisterValueChangedCallback(evt =>
+            {
+                evento.Metodo = evt.newValue;
+                EditorUtility.SetDirty(audioImp);
+                ActualizarListaEventosFiltrada(tipoSeleccionado); // Actualiza los campos dinámicos según el nuevo método
+            });
+            eventoItem.Add(metodoEditable);
+
+            // Dropdown editable para Evento FMOD
+            var eventoFMODEditable = new DropdownField("Evento", eventosDropdown.choices, evento.EventoFMOD);
+            eventoFMODEditable.RegisterValueChangedCallback(evt =>
+            {
+                evento.EventoFMOD = evt.newValue;
+                EditorUtility.SetDirty(audioImp);
+            });
+            eventoItem.Add(eventoFMODEditable);
+
+            // Contenedor para campos dinámicos
+            var dynamicFieldsContainer = new VisualElement();
+            dynamicFieldsContainer.AddToClassList("dynamic-fields-container");
+
+            // Mostrar campos adicionales según el método seleccionado
+            if (configuracionMetodos.ContainsKey(evento.Metodo))
+            {
+                foreach (var campo in configuracionMetodos[evento.Metodo])
+                {
+                    switch (campo)
+                    {
+                        case "startToggle":
+                            var startEditable = new Toggle("Reproducir") { value = evento.start };
+                            startEditable.RegisterValueChangedCallback(evt =>
+                            {
+                                evento.start = evt.newValue;
+                                EditorUtility.SetDirty(audioImp);
+                            });
+                            dynamicFieldsContainer.Add(startEditable);
+                            break;
+
+                        case "transformField":
+                            var transformEditable = new ObjectField("Transform")
+                            {
+                                objectType = typeof(GameObject),
+                                value = evento.gameobject
+                            };
+                            transformEditable.RegisterValueChangedCallback(evt =>
+                            {
+                                evento.gameobject = (GameObject)evt.newValue;
+                                EditorUtility.SetDirty(audioImp);
+                            });
+                            dynamicFieldsContainer.Add(transformEditable);
+                            break;
+                    }
+                }
+            }
+
+            eventoItem.Add(dynamicFieldsContainer);
+
+            // Botón para eliminar evento
+            var eliminarButton = new Button(() =>
+            {
+                audioImp.Eventos.Remove(evento);
+                EditorUtility.SetDirty(audioImp);
+                ActualizarListaEventosFiltrada(tipoSeleccionado); // Actualiza la lista filtrada
+            })
+            {
+                text = "Eliminar"
+            };
+            eventoItem.Add(eliminarButton);
+
+            // Añadir el evento al contenedor principal
+            listaEventosContainer.Add(eventoItem);
+        }
+    }
+
+
+}
