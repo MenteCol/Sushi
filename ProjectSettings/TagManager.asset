@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Comida
   - Banda
+  - Plato
+  - Piso
   layers:
   - Default
   - TransparentFX

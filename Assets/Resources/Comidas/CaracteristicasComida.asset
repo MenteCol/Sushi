@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3069a65b47add65459bf25fb76788636, type: 3}
+  m_Name: CaracteristicasComida
+  m_EditorClassIdentifier: 
+  nombreComida: Boost1
+  ID: 3
+  prefabsComidaBuena:
+  - {fileID: 189542717616936138, guid: 4309034594f46404fbbc629941a26234, type: 3}
+  - {fileID: 1603710518774881769, guid: f853073990e45f74e945264f22aff7d9, type: 3}
+  - {fileID: 3060004125419029665, guid: e0af165ad0069654cb95999f44a3ad1a, type: 3}
+  prefabsComidaMala:
+  - {fileID: 9048427532652432238, guid: 29ebefbcad0324c49b3ad254d4b5e6f6, type: 3}
+  - {fileID: 8943888127415234218, guid: c77d3a0955d4f864a817bf6fa89873af, type: 3}
+  prefabsComidaBoost:
+  - {fileID: 9066362686931024143, guid: 90db62688d15a8040b8564ef15b8d968, type: 3}
+  - {fileID: 1608501828836071143, guid: 9cae8d0ae9ac0d44a9630c5fe2ec1a11, type: 3}

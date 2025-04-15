@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class OpcionesGraficas : MonoBehaviour
 {
-#region Variables
+    #region Variables
 
     [Header("Depuración")]
     public bool mostrarDebug;
@@ -13,7 +13,7 @@ public class OpcionesGraficas : MonoBehaviour
     public TMP_Dropdown dropdownGraficos;
     public TMP_Dropdown dropdownResolucion;
     public Toggle togglePantallaCompleta;
-    
+
     private List<Resolution> resolucionesPersonalizadas = new List<Resolution>
     {
         new Resolution { width = 800, height = 600 },
@@ -24,10 +24,21 @@ public class OpcionesGraficas : MonoBehaviour
 
     private int estaPantallaCompleta;
 
-#endregion
+    public int anchoAndroid;
+    public int altoAndroid;
+
+    #endregion
 
     void Start()
     {
+
+#if UNITY_ANDROID
+        // En Android, se establece por defecto la resolución a 1920 x 1080
+        anchoAndroid = 1920;
+        altoAndroid = 1080;
+        Screen.SetResolution(anchoAndroid, altoAndroid, Screen.fullScreen);
+        MostrarLog("Resolución configurada a 1920 x 1080 por defecto en Android");
+#else
         #region Resolución de Ventana
 
         dropdownResolucion.ClearOptions();
@@ -46,7 +57,11 @@ public class OpcionesGraficas : MonoBehaviour
         dropdownResolucion.value = currentResolutionIndex;
         dropdownResolucion.RefreshShownValue();
 
+        // Selecciona la resolución deseada (en este caso la opción 3: 1920 x 1080)
+        CambiarResolucion(3);
+
         #endregion
+#endif
 
         if (PlayerPrefs.HasKey("valorGraficos") || PlayerPrefs.HasKey("valorPantallaCompleta") || PlayerPrefs.HasKey("valorResolucion"))
         {
@@ -59,6 +74,7 @@ public class OpcionesGraficas : MonoBehaviour
 
         MostrarLog("Valor inicial de resolución: " + dropdownResolucion.value);
 
+#if !UNITY_ANDROID
         for (int i = 0; i < resolucionesPersonalizadas.Count; i++)
         {
             if (dropdownResolucion.value == i)
@@ -67,6 +83,7 @@ public class OpcionesGraficas : MonoBehaviour
                 Screen.SetResolution(resolucionesPersonalizadas[i].width, resolucionesPersonalizadas[i].height, Screen.fullScreen);
             }
         }
+#endif
 
         #region Pantalla Completa
 
