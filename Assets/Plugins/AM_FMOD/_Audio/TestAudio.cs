@@ -7,7 +7,7 @@ public class TestAudio : MonoBehaviour
     public class PruebaAudio
     {
         public string nombreEvento; // Nombre del evento o prueba
-        public KeyCode teclaPrueba; // Tecla asociada a la prueba
+        //public KeyCode teclaPrueba; // Tecla asociada a la prueba
     }
 
     [Header("Pruebas de Audio")]
@@ -28,14 +28,14 @@ public class TestAudio : MonoBehaviour
     private void Update()
     {
         // Recorremos la lista de pruebas y verificamos si se presiona alguna tecla
-        foreach (var prueba in pruebasAudio)
-        {
-            if (Input.GetKeyDown(prueba.teclaPrueba))
-            {
-                ReproducirEvento(prueba.nombreEvento);
-                Debug.Log($"Reproduciendo evento: Para Usar el audio te llevas esta linea de codigo 'AudioImp.Instance.Reproducir(comillas "+prueba.nombreEvento+" comillas);'");
-            }
-        }
+        //foreach (var prueba in pruebasAudio)
+        //{
+        //    if (Input.GetKeyDown(prueba.teclaPrueba))
+        //    {
+        //        ReproducirEvento(prueba.nombreEvento);
+        //        Debug.Log($"Reproduciendo evento: Para Usar el audio te llevas esta linea de codigo 'AudioImp.Instance.Reproducir(comillas "+prueba.nombreEvento+" comillas);'");
+        //    }
+        //}
     }
 
     public void ReproducirEvento(string nombreEvento)
@@ -57,7 +57,7 @@ public class TestAudio : MonoBehaviour
         PruebaAudio nuevaPrueba = new PruebaAudio
         {
             nombreEvento = nombreEvento,
-            teclaPrueba = tecla
+            // teclaPrueba = tecla
         };
         pruebasAudio.Add(nuevaPrueba);
         Debug.Log($"Prueba agregada: {nombreEvento} con tecla: {tecla}");

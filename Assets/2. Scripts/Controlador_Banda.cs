@@ -13,8 +13,13 @@ public class Controlador_Banda : MonoBehaviour
     [SerializeField] private Transform finalBanda;
     public float velocidadBanda = 5f;
 
+    [Header("Referencias")]
+    public Controlador_Fases controladorFases;
+    public Controlador_Instancias controladorInstancias;
+
     void Start()
     {
+        controladorFases = GameObject.Find("Controlador_Fases").GetComponent<Controlador_Fases>();
         ActualizarListaBandas();
     }
 
@@ -34,17 +39,36 @@ public class Controlador_Banda : MonoBehaviour
 
     private void MoverBandas()
     {
-        for (int i = bandas.Count - 1; i >= 0; i--) // Recorremos de atrás hacia adelante para eliminar sin errores
+        //for (int i = bandas.Count - 1; i >= 0; i--) // Recorremos de atrás hacia adelante para eliminar sin errores
+        //{
+        //    if (bandas[i] != null)
+        //    {
+        //        bandas[i].transform.position = Vector3.MoveTowards(
+        //            bandas[i].transform.position,
+        //            finalBanda.position,
+        //            velocidadBanda * Time.deltaTime
+        //        );
+
+        //        // Si la banda llegó al destino, se elimina
+        //        if (Vector3.Distance(bandas[i].transform.position, finalBanda.position) < 0.1f)
+        //        {
+        //            Destroy(bandas[i]);
+        //            InstanciaBanda();
+        //            bandas.RemoveAt(i);
+        //        }
+        //    }
+        //}
+
+        for (int i = bandas.Count - 1; i >= 0; i--)
         {
             if (bandas[i] != null)
             {
                 bandas[i].transform.position = Vector3.MoveTowards(
                     bandas[i].transform.position,
                     finalBanda.position,
-                    velocidadBanda * Time.deltaTime
+                    controladorFases.velocidadBanda * Time.deltaTime
                 );
-
-                // Si la banda llegó al destino, se elimina
+                                
                 if (Vector3.Distance(bandas[i].transform.position, finalBanda.position) < 0.1f)
                 {
                     Destroy(bandas[i]);
@@ -53,6 +77,7 @@ public class Controlador_Banda : MonoBehaviour
                 }
             }
         }
+
     }
 
     private void ActualizarListaBandas()

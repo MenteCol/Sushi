@@ -10,4 +10,5 @@ public class CaracteristicasComida : ScriptableObject
     public List<ClickObjetosPuntos> prefabsComidaBuena = new List<ClickObjetosPuntos>();
     public List<ClickObjetosPuntos> prefabsComidaMala = new List<ClickObjetosPuntos>();
     public List<ClickObjetosPuntos> prefabsComidaBoost = new List<ClickObjetosPuntos>();
+    public List<GameObject> prefabsPlatos = new List<GameObject>();
 }

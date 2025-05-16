@@ -19,6 +19,7 @@ public class AudioImpEditor : Editor
     private DropdownField tipoDropdown;
     private DropdownField verTipoDropdown;
     private Dictionary<string, List<string>> configuracionMetodos;
+    private Button clearAllButton;
 
     public static class AudioImpEditorState
     {
@@ -29,6 +30,7 @@ public class AudioImpEditor : Editor
         public static GameObject ObjetoSeleccionado;
         public static bool StartSeleccionado;
         public static string VerTipoSeleccionado = "Música";
+
     }
 
     public override VisualElement CreateInspectorGUI()
@@ -38,6 +40,9 @@ public class AudioImpEditor : Editor
 
         var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Plugins/AM_FMOD/AudioImpStyle.uss");
         root.styleSheets.Add(styleSheet);
+
+        clearAllButton = root.Q<Button>("clearAllButton");                // Q<Button> busca el botón definido en UXML :contentReference[oaicite:0]{index=0}
+        clearAllButton.clicked += ClearAllEventos;
 
         datosContainer = root.Q<VisualElement>("Datos");
 
@@ -307,6 +312,15 @@ public class AudioImpEditor : Editor
         }
     }
 
+    private void ClearAllEventos()
+    {
+        var audioImp = (AudioImp)target;
+        audioImp.Eventos.Clear();                                      // List<T>.Clear() elimina todos los elementos :contentReference[oaicite:2]{index=2}
+        EditorUtility.SetDirty(audioImp);                              // Marca el objeto como modificado para que Unity guarde cambios :contentReference[oaicite:3]{index=3}
+                                                                       // Refresca la lista en pantalla
+        verTipoDropdown.value = tipoDropdown.value;
+        ActualizarListaEventosFiltrada(tipoDropdown.value);
+    }
 
     // Estilos del cada Item
 }

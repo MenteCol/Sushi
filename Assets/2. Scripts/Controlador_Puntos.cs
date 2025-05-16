@@ -6,14 +6,18 @@ using System.Collections;
 
 public class Controlador_Puntos : MonoBehaviour
 {
-    public GameManager gameManager;
-           
+    #region Variables
+
     [Header("Valores")]
     [SerializeField] private TextMeshProUGUI puntajeText;
     public float tiempo = 0;
     public int puntaje = 0;
+    public bool tieneHambre;
+    public string eventoMalestar;
+    public bool reprodujoSonidoMalestar;
     [Header("Malestar")]
     public bool estaEnfermo;
+    public bool estaVomitando;
     public int malestar = 0;
     [Header("Contadores Enfermo")]    
     public float actualTimerEnfermo;    
@@ -23,14 +27,21 @@ public class Controlador_Puntos : MonoBehaviour
     public float llenura = 0;
     public float factorReduccion;
     [SerializeField] private Slider llenuraSlider;
-    [Header("Referencias")]
-    [SerializeField] private Controlador_Instancias controladorInstancias;
-    [SerializeField] private Controlador_Banda controladorBanda;
+    public Image fondoEstomago;
     [Header("Lista Objetos Escena")]
     public List<ClickObjetosPuntos> objetosComida = new List<ClickObjetosPuntos>();
+    [Header("Referencias")]
+    public GameManager gameManager;
+    public GameOver_Controller gameOverController;
+    [SerializeField] private Controlador_Instancias controladorInstancias;
+    [SerializeField] private Controlador_Banda controladorBanda;
+    public Controlador_Fases controladorFases;
+
+    #endregion
 
     void Start()
     {
+        controladorFases = GameObject.Find("Controlador_Fases").GetComponent<Controlador_Fases>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         controladorInstancias = GameObject.Find("Controlador_Instancias").GetComponent<Controlador_Instancias>();
         controladorBanda = GameObject.Find("Controlador_Instancias").GetComponent<Controlador_Banda>();
@@ -59,6 +70,9 @@ public class Controlador_Puntos : MonoBehaviour
         if (llenuraSlider != null)
             llenuraSlider.value = llenura;
 
+        if (fondoEstomago != null)
+            fondoEstomago.fillAmount = llenura;
+
         actualTimerEnfermo = gameManager.timerEnfermo;
         actualTimerAcumulacion = gameManager.timerAcumulacionEnfermo;
 
@@ -67,21 +81,109 @@ public class Controlador_Puntos : MonoBehaviour
     
     void Update()
     {        
+        if(controladorFases.enPausa)
+            return;
+
+        fondoEstomago.fillAmount = llenura;
+
         ReduccionLlenura();
+        ContadorMalestar();
         ActualizarFase();
+        ActualizarMarcadorGUI();
 
-        if (puntajeText != null)
-        {
-            puntajeText.text = puntaje.ToString("D2");
+        if (llenura >= 1.2 && !estaLleno) // PENALIZACION LLENURA
+        {           
+            StartCoroutine(DesLlenura(gameManager.valorReduccion, gameManager.valorVelReduccion));         
         }
 
-        if (llenuraSlider != null)
+        if (estaEnfermo || estaLleno)
         {
-            llenuraSlider.value = llenura;
+            if (!reprodujoSonidoMalestar)
+            {
+                AudioImp.Instance.Reproducir(eventoMalestar);
+                estaVomitando = true;
+                reprodujoSonidoMalestar = true;
+            }
+        }
+        else
+        {
+            estaVomitando = false;
+            reprodujoSonidoMalestar = false;
         }
 
-        #region Malestar
+    }
 
+    public void SumarPuntos(int puntos, float llenuraComida, int id, int malestarComida = 0)
+    {
+        puntaje += puntos;
+        malestar += malestarComida;
+
+        SumarLlenura(llenuraComida);
+        controladorInstancias.InstanciarPlatos(id);
+    }
+
+    public void SumarLlenura(float llenuraComida)
+    {
+        if (llenura <= 1.2f)
+        {
+            llenura += llenuraComida;
+        }
+    }
+
+
+    public void ReduccionLlenura()
+    {
+        factorReduccion = controladorFases.factorReduccion;
+
+        if (llenura > 0)
+        {            
+            llenura = Mathf.Max(0, llenura - factorReduccion * Time.deltaTime);
+        }
+
+        if (llenura <= 0.0001)
+        {
+            tieneHambre = true;
+        }
+        else
+        {
+            tieneHambre = false;
+        }
+    }
+
+    public void ActualizarFase()
+    {
+        if (puntaje >= 30 && gameManager.fase == 1)
+        {
+            gameManager.fase = 2;            
+        }
+
+        if (puntaje >= 60 && gameManager.fase == 2)
+        {
+            gameManager.fase = 3;            
+        }
+    }
+
+    public IEnumerator DesLlenura(float valorObjetivo, float velocidad)
+    {
+        estaLleno = true;        
+
+        while (llenura > valorObjetivo)
+        {        
+            llenura -= velocidad * Time.deltaTime;
+        
+            if (llenura < valorObjetivo)
+            {
+                llenura = valorObjetivo;
+            }
+            yield return null;
+        }
+
+        estaVomitando = false;
+        estaLleno = false;
+    }
+
+    public void ContadorMalestar()
+    {
         if (malestar > 0 && malestar < gameManager.valorMalestarMaximo)
         {
             if (actualTimerAcumulacion >= 0)
@@ -95,14 +197,13 @@ public class Controlador_Puntos : MonoBehaviour
                 }
             }
         }
-        else if (malestar == 3)
+        else if (malestar == 3) // Reiniciar Timer
         {
             actualTimerAcumulacion = gameManager.timerAcumulacionEnfermo;
         }
 
-        
         if (malestar == 3)
-        {         
+        {
             estaEnfermo = true;
 
             if (actualTimerEnfermo >= 0)
@@ -117,79 +218,18 @@ public class Controlador_Puntos : MonoBehaviour
                 }
             }
         }
-        #endregion
-
-        #region Llenura
-        if (llenura >= 1.19 && !estaLleno)
-        {           
-            StartCoroutine(DesLlenura(gameManager.valorReduccion, gameManager.valorVelReduccion));            
-        }
-
-        #endregion
 
     }
-
-    public void SumarPuntos(int puntos, float llenuraComida, int malestarComida = 0)
+    public void ActualizarMarcadorGUI()
     {
-        puntaje += puntos;
-        malestar += malestarComida;
-
-        if (llenura <= 1.3f)
+        if (puntajeText != null)
         {
-            llenura += llenuraComida;
+            puntajeText.text = puntaje.ToString("D2");
         }
 
-        if (gameManager.timerInstanciaComida > 0.5f) // Valor minimo instancia
+        if (llenuraSlider != null)
         {
-            gameManager.timerInstanciaComida -= 0.05f;
+            llenuraSlider.value = llenura;
         }
-
-        if (controladorBanda.velocidadBanda < 9) //Valor maximo velocidad banda
-        {
-            controladorBanda.velocidadBanda += 0.05f;
-        }
-
-        controladorInstancias.InstanciarPlatos();
-    }
-
-    public void ReduccionLlenura()
-    {
-        if (llenura > 0)
-        {            
-            llenura = Mathf.Max(0, llenura - factorReduccion * Time.deltaTime);
-        }
-    }
-
-    public void ActualizarFase()
-    {
-        if (puntaje >= 30 && gameManager.fase == 1)
-        {
-            gameManager.fase = 2;
-            factorReduccion = gameManager.fr_llenura2;
-        }
-
-        if (puntaje >= 60 && gameManager.fase == 2)
-        {
-            gameManager.fase = 3;
-            factorReduccion = gameManager.fr_llenura3;
-        }
-    }
-
-    public IEnumerator DesLlenura(float valorObjetivo, float velocidad)
-    {
-        estaLleno = true;
-
-        while (llenura > valorObjetivo)
-        {        
-            llenura -= velocidad * Time.deltaTime;
-        
-            if (llenura < valorObjetivo)
-            {
-                llenura = valorObjetivo;
-            }
-            yield return null;
-        }
-        
-        estaLleno = false;
     }
 }

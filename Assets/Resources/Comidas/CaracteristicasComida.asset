@@ -12,15 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3069a65b47add65459bf25fb76788636, type: 3}
   m_Name: CaracteristicasComida
   m_EditorClassIdentifier: 
-  nombreComida: Boost1
-  ID: 3
   prefabsComidaBuena:
-  - {fileID: 189542717616936138, guid: 4309034594f46404fbbc629941a26234, type: 3}
-  - {fileID: 1603710518774881769, guid: f853073990e45f74e945264f22aff7d9, type: 3}
-  - {fileID: 3060004125419029665, guid: e0af165ad0069654cb95999f44a3ad1a, type: 3}
+  - {fileID: 8771450286695911880, guid: 4309034594f46404fbbc629941a26234, type: 3}
+  - {fileID: 5489060987687461111, guid: f853073990e45f74e945264f22aff7d9, type: 3}
+  - {fileID: 7447754265041421096, guid: e0af165ad0069654cb95999f44a3ad1a, type: 3}
   prefabsComidaMala:
-  - {fileID: 9048427532652432238, guid: 29ebefbcad0324c49b3ad254d4b5e6f6, type: 3}
-  - {fileID: 8943888127415234218, guid: c77d3a0955d4f864a817bf6fa89873af, type: 3}
+  - {fileID: 6364938544542279186, guid: 29ebefbcad0324c49b3ad254d4b5e6f6, type: 3}
+  - {fileID: 4481569982727847778, guid: c77d3a0955d4f864a817bf6fa89873af, type: 3}
   prefabsComidaBoost:
-  - {fileID: 9066362686931024143, guid: 90db62688d15a8040b8564ef15b8d968, type: 3}
-  - {fileID: 1608501828836071143, guid: 9cae8d0ae9ac0d44a9630c5fe2ec1a11, type: 3}
+  - {fileID: 4326574663911367098, guid: 90db62688d15a8040b8564ef15b8d968, type: 3}
+  - {fileID: 866995762598895139, guid: 9cae8d0ae9ac0d44a9630c5fe2ec1a11, type: 3}
+  prefabsPlatos:
+  - {fileID: 4223130823013988836, guid: ffbd9e1bcab865f44a3378bd66d75f50, type: 3}
+  - {fileID: 6677738506760161836, guid: a87762a2d08216a459ff652474cc6b6d, type: 3}
+  - {fileID: 9182984617598127648, guid: 3da89df3e84ea424aa7cf1c62cbf71cf, type: 3}

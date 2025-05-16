@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuOpciones : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class MenuOpciones : MonoBehaviour
     public GameObject panelControles;
     public GameObject panelSonido;
     public GameObject panelGraficos;
+    
 
 #endregion
 
@@ -64,6 +66,12 @@ public class MenuOpciones : MonoBehaviour
     {
         MostrarLog("Saliendo del juego...");
         Application.Quit();
+    }
+
+    public void Reintentar(string nombreEscena)
+    {
+        SceneManager.LoadScene(nombreEscena);
+        MostrarLog("Recargando Escena");
     }
 
     private void MostrarLog(string mensaje)
