@@ -15,6 +15,7 @@ public class LimpiarBasura : MonoBehaviour
     public bool estaPresionando;
     public bool flagReducir;
     public bool flagAumentar;
+    public GameObject imagenEscoba;
 
     [Header("De Sonido")]
     public string eventoPlay;
@@ -29,7 +30,7 @@ public class LimpiarBasura : MonoBehaviour
     void OnEnable()
     {
         EnhancedTouchSupport.Enable();
-        TouchSimulation.Enable(); // Añadir en tu script inicial
+        TouchSimulation.Enable();
     }
     private void OnDisable() => EnhancedTouchSupport.Disable();    
 
@@ -74,6 +75,7 @@ public class LimpiarBasura : MonoBehaviour
                     estaPresionando = true;
                     if (!reproduciendoEvento)
                     {
+                        imagenEscoba.SetActive(true);
                         AudioImp.Instance.Reproducir(eventoPlay);
                         reproduciendoEvento = true;
                     }
@@ -84,6 +86,7 @@ public class LimpiarBasura : MonoBehaviour
             {
                 sostenerLimpiarTimer += Time.deltaTime;
                 basuraTimer = basuraTimer_i;
+                
             }
             // Al soltar, reset
             else if (mouse.leftButton.wasReleasedThisFrame && estaPresionando)
@@ -92,6 +95,7 @@ public class LimpiarBasura : MonoBehaviour
                 estaPresionando = false;
                 flagReducir = false;
                 reproduciendoEvento = false;
+                imagenEscoba.SetActive(false);
                 AudioImp.Instance.Reproducir(eventoStop);
             }
         }
@@ -108,6 +112,7 @@ public class LimpiarBasura : MonoBehaviour
                     estaPresionando    = true;
                     if (!reproduciendoEvento)
                     {
+                    imagenEscoba.SetActive(true);
                         AudioImp.Instance.Reproducir(eventoPlay);
                         reproduciendoEvento = true;
                     }
@@ -135,6 +140,7 @@ public class LimpiarBasura : MonoBehaviour
                 estaPresionando      = false;
                 flagReducir          = false;
                 reproduciendoEvento  = false;
+                imagenEscoba.SetActive(false);
                 AudioImp.Instance.Reproducir(eventoStop);
             }
         }
@@ -152,10 +158,14 @@ public class LimpiarBasura : MonoBehaviour
     public void ReiniciarBasura()
     {
         instanciarBasura.BorrarBasura();
+
         if (!flagReducir)
         {
             ReducirContadorLimpiar();
+
+            imagenEscoba.SetActive(false);
             flagReducir = true;
+            AudioImp.Instance.Reproducir("Miau");
         }
         if (mostrarDebug) Debug.Log("[LimpiarBasura] Basura limpiada");
     }

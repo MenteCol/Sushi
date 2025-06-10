@@ -10,10 +10,13 @@ public class InstanciarBasura : MonoBehaviour
     public float contStrikeNoComer;
     public float timerStrikeBasura_i;
     public float timerStrikeBasura;
+    public bool sonidoAlerta;
+    public GameObject imagenBoton;
     [Header("Referencias")]
     public GameManager gameManager;
     public Controlador_Instancias controladorInstancias;
     public Controlador_Fases controladorFases;
+    public LimpiarBasura limpiarBasura;
     [Header("Listas")]
     public List<Transform> puntoBasura = new List<Transform>();
     public List<GameObject> objetosBasura = new List<GameObject>();
@@ -40,6 +43,29 @@ public class InstanciarBasura : MonoBehaviour
         {
             basuraLlena = false;
             this.GetComponent<BoxCollider>().isTrigger = true;
+        }
+
+        if (contadorBasura >= gameManager.valorLimiteLlena - 2)
+        {
+            Controlador_EmotesT.Instance.ReproducirEmoji("Bravo");
+            imagenBoton.SetActive(true);
+
+            if (!sonidoAlerta)
+            {
+                AudioImp.Instance.Reproducir("gatoStrikes");
+                sonidoAlerta = true;
+            }
+        }
+        else
+        {
+            sonidoAlerta = false;
+            imagenBoton.SetActive(false);
+        }
+
+        if (limpiarBasura.estaPresionando)
+        {
+            Debug.Log("[InstanciarBasura] Ocultar Boton al presionar la basura");
+            imagenBoton.SetActive(false);
         }
 
         ////

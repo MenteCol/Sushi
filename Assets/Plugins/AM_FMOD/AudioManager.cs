@@ -17,11 +17,11 @@ public class AudioManager : MonoBehaviour
 
     [Header("Volume")]
     [Range(0, 1)]
-    public float masterVolume = 1;
+    public float masterVolume = 0.75f;
     [Range(0, 1)]
-    public float musicVolume = 1;
+    public float musicVolume = 1f;
     [Range(0, 1)]
-    public float SFXVolume = 1;
+    public float SFXVolume = 1f;
 
     private Bus masterBus;
     private Bus musicBus;
@@ -49,6 +49,11 @@ public class AudioManager : MonoBehaviour
             Debug.LogError("Hay más de un AudioManager en la escena");
             return;
         }
+
+        // CARGANDO VALORES DE AUDIO
+        masterVolume = PlayerPrefs.GetFloat("volumenMaster");
+        musicVolume = PlayerPrefs.GetFloat("volumenMusica");
+        SFXVolume = PlayerPrefs.GetFloat("volumenSFX");
 
         instance = this;
 
@@ -289,10 +294,6 @@ public class AudioManager : MonoBehaviour
             Debug.LogWarning("Referencia de sonido no válida. No se puede reproducir el evento.");
         }
     }
-
-
-
-
 
     #endregion
 

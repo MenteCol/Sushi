@@ -80,6 +80,7 @@ public class GameManager : MonoBehaviour
     public void ReducirVelocidad()
     {
         float valorEntradaLlennura = controladorPuntos.llenura;
+        Controlador_EmotesT.Instance.ReproducirEmoji("Boost");
 
         Debug.Log("[GameManager] Metodo ReducirVelcidad");        
 

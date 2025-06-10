@@ -112,9 +112,5 @@ public class VolumeSlider : MonoBehaviour
         }
 
         OnSliderValueChanged();
-
-
     }
-
-
 }

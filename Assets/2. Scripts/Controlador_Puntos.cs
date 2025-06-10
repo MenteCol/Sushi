@@ -8,6 +8,11 @@ public class Controlador_Puntos : MonoBehaviour
 {
     #region Variables
 
+    [Header("Combos")]
+    public int combo;
+    public int combo_i = 0;
+    public float timerRestartCombo;
+    public float timerRestartCombo_i;
     [Header("Valores")]
     [SerializeField] private TextMeshProUGUI puntajeText;
     public float tiempo = 0;
@@ -36,6 +41,7 @@ public class Controlador_Puntos : MonoBehaviour
     [SerializeField] private Controlador_Instancias controladorInstancias;
     [SerializeField] private Controlador_Banda controladorBanda;
     public Controlador_Fases controladorFases;
+    public Controlador_Combos controladorCombos;
 
     #endregion
 
@@ -77,6 +83,11 @@ public class Controlador_Puntos : MonoBehaviour
         actualTimerAcumulacion = gameManager.timerAcumulacionEnfermo;
 
         factorReduccion = gameManager.fr_llenura1;
+
+        //
+
+        combo = combo_i;
+        timerRestartCombo = timerRestartCombo_i;
     }
     
     void Update()
@@ -110,17 +121,42 @@ public class Controlador_Puntos : MonoBehaviour
             estaVomitando = false;
             reprodujoSonidoMalestar = false;
         }
+     
+        if (combo > 0)
+        {
+            timerRestartCombo -= Time.deltaTime;
+
+            if (timerRestartCombo <= 0)
+            {
+                combo = 0; // Reinicia combo si se acaba el tiempo
+                timerRestartCombo = 0;
+                Debug.Log("Combo reiniciado por inactividad");
+            }
+        }
+
+        if (combo == 10) Controlador_EmotesT.Instance.ReproducirEmoji("Feliz");
+        if (combo == 40) Controlador_EmotesT.Instance.ReproducirEmoji("Feliz");
+        if (combo == 80) Controlador_EmotesT.Instance.ReproducirEmoji("Feliz");
+        if (combo == 120) Controlador_EmotesT.Instance.ReproducirEmoji("Feliz");        
 
     }
 
-    public void SumarPuntos(int puntos, float llenuraComida, int id, int malestarComida = 0)
+    public void SumarPuntos(int puntos, float llenuraComida, int id, int comboClick, int malestarComida = 0)
     {
         puntaje += puntos;
         malestar += malestarComida;
 
+        if (comboClick > 0)
+        {
+            combo += comboClick;
+            timerRestartCombo = timerRestartCombo_i; // Reinicia el temporizador al sumar combo
+        }
+
         SumarLlenura(llenuraComida);
         controladorInstancias.InstanciarPlatos(id);
+        controladorCombos.MostrarCombo();
     }
+
 
     public void SumarLlenura(float llenuraComida)
     {
@@ -143,6 +179,7 @@ public class Controlador_Puntos : MonoBehaviour
         if (llenura <= 0.0001)
         {
             tieneHambre = true;
+            Controlador_EmotesT.Instance.ReproducirEmoji("Hambre");
         }
         else
         {

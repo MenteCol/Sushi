@@ -50,6 +50,6 @@ public class Controlador_AnimEstomago : MonoBehaviour
         if (estadoActual == nuevoEstado) return;
         animatorImagenEstomago.Play(nuevoEstado);
         estadoActual = nuevoEstado;
-        Debug.Log("[AnimEstomago: Reproducir Animacion " + nuevoEstado + "]");
+        // Debug.Log("[AnimEstomago: Reproducir Animacion " + nuevoEstado + "]");
     }
 }

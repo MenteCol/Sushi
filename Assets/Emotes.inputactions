@@ -1,0 +1,54 @@
+{
+    "name": "Emotes",
+    "maps": [
+        {
+            "name": "UI",
+            "id": "cdfa0889-5e7c-430b-bbd4-0df3616316f6",
+            "actions": [
+                {
+                    "name": "MostrarCombo",
+                    "type": "Button",
+                    "id": "6b148ba5-a906-43bf-9600-bc47714e43d5",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "EsconderCombo",
+                    "type": "Button",
+                    "id": "63ff457a-de1f-4ca6-bfdb-1e3a397faa83",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "babd002e-ed7f-4cfb-8d91-1c6f10e054b7",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MostrarCombo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5634659e-1ebe-4041-b459-ae32f175254d",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EsconderCombo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

@@ -1,127 +1,150 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.EnhancedTouch;
+using System.Collections.Generic;
 
 public class ClickObjetosPuntos : MonoBehaviour
 {
-    [Header("Identificador Asignado")]
+    [Header("Configuración de Objeto")]
     [SerializeField] public int ID;
+    [SerializeField] private float multiplicadorLlenura = 1f;
 
-    [Header("Valor Instancia")]
-    public float puntosLlenuraDif;
-
-    [Header("Valores Generales")]
-    [SerializeField] public int puntosComida;
-    [SerializeField] public float puntosLlenura;
-    [SerializeField] public int puntosMalestar;
-
-    [Header("Audio")]
-    [SerializeField] private string audioComer;
-    [SerializeField] private string audioNoPuede;
+    [Header("Valores de Interacción")]
+    [SerializeField] private int puntosComida = 1;
+    [SerializeField] private float puntosLlenura = 0.1f;
+    [SerializeField] private int puntosMalestar = 0;
 
     [Header("Referencias")]
-    public Controlador_Fases controladorFases;
     [SerializeField] private Controlador_Puntos controladorPuntos;
     [SerializeField] private InstanciarBasura instanciarBasura;
     [SerializeField] private GameManager gameManager;
 
+    [Header("Audio")]
+    [SerializeField] private string audioComer = "Comer";
+    [SerializeField] private string audioNoPuede = "NoPuede";
+
+    private bool mostrarGizmo = false;
+    private Controlador_Fases controladorFases;
+
     private void Start()
     {
-        controladorFases = GameObject.Find("Controlador_Fases").GetComponent<Controlador_Fases>();
-        controladorPuntos = GameObject.Find("Controlador_Puntaje").GetComponent<Controlador_Puntos>();
-        instanciarBasura = GameObject.Find("ColliderBasura").GetComponent<InstanciarBasura>();
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        // Usar las nuevas funciones de Unity 2023+
+        controladorFases = FindAnyObjectByType<Controlador_Fases>();
 
-        EventSystem.current.pixelDragThreshold = 0;
+        if (controladorPuntos == null)
+            controladorPuntos = FindAnyObjectByType<Controlador_Puntos>();
+
+        if (instanciarBasura == null)
+            instanciarBasura = FindAnyObjectByType<InstanciarBasura>();
+
+        if (gameManager == null)
+            gameManager = FindAnyObjectByType<GameManager>();
+
+        // Verificar que todas las referencias estén asignadas
+        ValidarReferencias();
     }
 
-    private void OnEnable()
+    private void ValidarReferencias()
     {
-        EnhancedTouchSupport.Enable();
+        if (controladorFases == null)
+            Debug.LogWarning($"[{gameObject.name}] No se encontró Controlador_Fases en la escena");
+
+        if (controladorPuntos == null)
+            Debug.LogWarning($"[{gameObject.name}] No se encontró Controlador_Puntos en la escena");
+
+        if (instanciarBasura == null)
+            Debug.LogWarning($"[{gameObject.name}] No se encontró InstanciarBasura en la escena");
+
+        if (gameManager == null)
+            Debug.LogWarning($"[{gameObject.name}] No se encontró GameManager en la escena");
     }
 
-    private void OnDisable()
+    public void RegistrarToque(int indiceDedo)
     {
-        EnhancedTouchSupport.Disable();
-    }
-
-    private void Update()
-    {
-        if (controladorFases.enPausa)
+        if (!PuedeInteractuar())
+        {
+            ReproducirAudioNoPuede();
             return;
-
-#if UNITY_ANDROID
-        // Lógica de toque móvil
-        foreach (var touch in UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches)
-        {
-            if (touch.phase == UnityEngine.InputSystem.TouchPhase.Began)
-                ProcessTouch(touch.screenPosition);
         }
-#endif
 
-#if UNITY_EDITOR || UNITY_STANDALONE
-        // Lógica de clic en PC/Editor
-        var mouse = Mouse.current;
-        if (mouse != null && mouse.leftButton.wasPressedThisFrame)
-        {
-            ProcessTouch(mouse.position.ReadValue());
-        }
-#endif
+        ConfigurarValoresPorID();
+        EjecutarAccionPrincipal();
+        DestruirObjeto();
     }
 
-    private void ProcessTouch(Vector2 screenPos)
+    private bool PuedeInteractuar()
     {
-        // Evitar interacción sobre UI
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(-1))
-            return;
+        if (controladorPuntos == null || instanciarBasura == null)
+            return false;
 
-        Ray ray = Camera.main.ScreenPointToRay(screenPos);
-        if (Physics.Raycast(ray, out RaycastHit hit) && hit.transform == transform)
-            HandleClick();
+        return !controladorPuntos.estaEnfermo &&
+               !controladorPuntos.estaLleno &&
+               !instanciarBasura.basuraLlena;
     }
 
-    private void HandleClick()
+    private void ConfigurarValoresPorID()
     {
-        if (!controladorPuntos.estaEnfermo && !controladorPuntos.estaLleno && !instanciarBasura.basuraLlena)
+        switch (ID)
         {
-            switch (ID)
-            {
-                case 1:
-                    puntosComida = 1;
-                    puntosLlenura = 0.1f;
-                    break;
-                case 2:
-                    puntosComida = 1;
-                    puntosLlenura = 0.2f;
-                    puntosMalestar = 1;
-                    break;
-                case 3:
-                    puntosComida = 1;
-                    puntosLlenura = 0.05f;
-                    gameManager.ReducirVelocidad();
-                    break;
-                default:
-                    return;
-            }
+            case 1:
+                puntosComida = 1;
+                puntosLlenura = 0.1f;
+                puntosMalestar = 0;
+                break;
+            case 2:
+                puntosComida = 1;
+                puntosLlenura = 0.2f;
+                puntosMalestar = 1;
+                break;
+            case 3:
+                puntosComida = 1;
+                puntosLlenura = 0.05f;
+                gameManager?.ReducirVelocidad();
+                puntosMalestar = 0;
+                break;
+            default:
+                Debug.LogWarning($"[{gameObject.name}] ID {ID} no reconocido");
+                break;
+        }
+    }
 
+    private void EjecutarAccionPrincipal()
+    {
+        if (controladorPuntos != null)
+        {
             controladorPuntos.SumarPuntos(
                 puntosComida,
-                puntosLlenura * puntosLlenuraDif,
+                puntosLlenura * multiplicadorLlenura,
                 ID,
-                puntosMalestar);
+                1,
+                puntosMalestar
+            );
+        }
 
+        if (AudioImp.Instance != null)
             AudioImp.Instance.Reproducir(audioComer);
-            Destroy(gameObject);
-        }
-        else
-        {
-            AudioImp.Instance.Reproducir(audioNoPuede);
-        }
 
-        if (controladorPuntos.estaEnfermo)
+        MostrarFeedbackVisual();
+    }
+
+    private void ReproducirAudioNoPuede()
+    {
+        if (AudioImp.Instance != null)
             AudioImp.Instance.Reproducir(audioNoPuede);
     }
+
+    private void MostrarFeedbackVisual()
+    {
+        mostrarGizmo = true;
+        CancelInvoke(nameof(DesactivarGizmo));
+        Invoke(nameof(DesactivarGizmo), 1f);
+    }
+
+    private void DestruirObjeto()
+    {
+        if (gameObject != null)
+            Destroy(gameObject);
+    }
+
+    private void DesactivarGizmo() => mostrarGizmo = false;
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -135,8 +158,14 @@ public class ClickObjetosPuntos : MonoBehaviour
             transform.SetParent(null);
     }
 
-    public void AsignarID(int nuevoID)
+    private void OnDrawGizmos()
     {
-        ID = nuevoID;
+        if (mostrarGizmo)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(transform.position, 0.3f);
+        }
     }
+
+    public void AsignarID(int nuevoID) => ID = nuevoID;
 }

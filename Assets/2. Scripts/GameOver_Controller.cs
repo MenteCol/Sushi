@@ -1,3 +1,4 @@
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 public class GameOver_Controller : MonoBehaviour
 {
@@ -29,9 +30,10 @@ public class GameOver_Controller : MonoBehaviour
     public InstanciarBasura instanciarBasura;
     public Controlador_Puntos controladorPuntos;
     public Controlador_Fases controladorFases;
+    public MovimientoStrike movimientoStrike;
     void Start()
     {
-        controladorFases = GameObject.Find("Controlador_Fases").GetComponent<Controlador_Fases>();
+        controladorFases = GameObject.Find("Controlador_Fases").GetComponent<Controlador_Fases>();        
         timerCondicion1 = timerCondicion1_i;
         timerHambre = timerHambre_i;
     }
@@ -55,6 +57,11 @@ public class GameOver_Controller : MonoBehaviour
         StrikeEnfermo();
 
         StrikeBasura();
+
+        if (strikes >= 4)
+        {
+            Controlador_EmotesT.Instance.ReproducirEmoji("GameOver");
+        }
     }
 
     public void StrikeBasura()
@@ -116,7 +123,7 @@ public class GameOver_Controller : MonoBehaviour
             if (timerHambre <= 0 && !flagHambre)
             {
                 SumarStrikes();
-                flagHambre = true;
+                flagHambre = true;                
             }
         }
         else
@@ -165,6 +172,9 @@ public class GameOver_Controller : MonoBehaviour
 
     public void SumarStrikes()
     {
+        movimientoStrike.AplicarFuerzaAleatoria();
+        AudioImp.Instance.Reproducir("gatoStrikes");
+        Controlador_EmotesT.Instance.ReproducirEmoji("Bravo");
         strikes++;
     }
 
