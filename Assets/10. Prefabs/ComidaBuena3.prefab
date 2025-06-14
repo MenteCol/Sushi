@@ -124,16 +124,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ID: 0
-  puntosLlenuraDif: 1.35
+  multiplicadorLlenura: 1
   puntosComida: 0
   puntosLlenura: 0
   puntosMalestar: 0
-  audioComer: cBuena
-  audioNoPuede: Equivocado
-  controladorFases: {fileID: 0}
   controladorPuntos: {fileID: 0}
   instanciarBasura: {fileID: 0}
   gameManager: {fileID: 0}
+  audioComer: cBuena
+  audioNoPuede: Equivocado
 --- !u!54 &7689109497058696074
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -160,7 +159,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!1 &8565369261602879853
 GameObject:
   m_ObjectHideFlags: 0

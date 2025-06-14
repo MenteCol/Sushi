@@ -21,12 +21,17 @@ public class ClickObjetosPuntos : MonoBehaviour
     [SerializeField] private string audioComer = "Comer";
     [SerializeField] private string audioNoPuede = "NoPuede";
 
+    [Header("Raycast")]
+    [SerializeField] private bool hacerRaycast = true;
+    [SerializeField] private float distanciaRaycast = 2f;
+
     private bool mostrarGizmo = false;
     private Controlador_Fases controladorFases;
 
+    private Transform bandaDetectada = null;
+
     private void Start()
     {
-        // Usar las nuevas funciones de Unity 2023+
         controladorFases = FindAnyObjectByType<Controlador_Fases>();
 
         if (controladorPuntos == null)
@@ -38,8 +43,35 @@ public class ClickObjetosPuntos : MonoBehaviour
         if (gameManager == null)
             gameManager = FindAnyObjectByType<GameManager>();
 
-        // Verificar que todas las referencias estén asignadas
         ValidarReferencias();
+    }
+
+    private void Update()
+    {
+        RaycastHit hit;
+        Vector3 origen = transform.position;
+        Vector3 direccion = Vector3.down;
+
+        if (Physics.Raycast(origen, direccion, out hit, distanciaRaycast) && hacerRaycast)
+        {
+            Debug.DrawRay(origen, direccion * hit.distance, Color.cyan);
+
+            if (hit.collider.CompareTag("Banda"))
+            {
+                if (bandaDetectada != hit.transform)
+                {
+                    bandaDetectada = hit.transform;
+                    transform.SetParent(bandaDetectada);
+                    Invoke("QuitarRaycast", 2f);
+                }
+            }            
+        }            
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Banda"))
+            transform.SetParent(null);
     }
 
     private void ValidarReferencias()
@@ -146,18 +178,6 @@ public class ClickObjetosPuntos : MonoBehaviour
 
     private void DesactivarGizmo() => mostrarGizmo = false;
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Banda"))
-            transform.SetParent(collision.transform);
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Banda"))
-            transform.SetParent(null);
-    }
-
     private void OnDrawGizmos()
     {
         if (mostrarGizmo)
@@ -165,6 +185,11 @@ public class ClickObjetosPuntos : MonoBehaviour
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(transform.position, 0.3f);
         }
+    }
+
+    private void QuitarRaycast()
+    { 
+        hacerRaycast = false;    
     }
 
     public void AsignarID(int nuevoID) => ID = nuevoID;

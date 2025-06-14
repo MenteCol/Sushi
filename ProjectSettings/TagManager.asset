@@ -8,6 +8,7 @@ TagManager:
   - Banda
   - Plato
   - Piso
+  - BandaAsset
   layers:
   - Default
   - TransparentFX

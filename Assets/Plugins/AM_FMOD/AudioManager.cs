@@ -17,11 +17,11 @@ public class AudioManager : MonoBehaviour
 
     [Header("Volume")]
     [Range(0, 1)]
-    public float masterVolume = 0.75f;
+    public float masterVolume;
     [Range(0, 1)]
-    public float musicVolume = 1f;
+    public float musicVolume;
     [Range(0, 1)]
-    public float SFXVolume = 1f;
+    public float SFXVolume;
 
     private Bus masterBus;
     private Bus musicBus;
@@ -50,10 +50,35 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        // CARGANDO VALORES DE AUDIO
-        masterVolume = PlayerPrefs.GetFloat("volumenMaster");
-        musicVolume = PlayerPrefs.GetFloat("volumenMusica");
-        SFXVolume = PlayerPrefs.GetFloat("volumenSFX");
+        if (PlayerPrefs.HasKey("volumenMaster"))
+        {
+            masterVolume = PlayerPrefs.GetFloat("volumenMaster");
+        }
+        else
+        {
+            masterVolume = 0.75f;
+            PlayerPrefs.SetFloat("volumenMaster", masterVolume);
+        }
+
+        if (PlayerPrefs.HasKey("volumenMusica"))
+        {
+            musicVolume = PlayerPrefs.GetFloat("volumenMusica");
+        }
+        else
+        {
+            musicVolume = 1f;
+            PlayerPrefs.SetFloat("volumenMusica", musicVolume);
+        }
+
+        if (PlayerPrefs.HasKey("volumenSFX"))
+        {
+            SFXVolume = PlayerPrefs.GetFloat("volumenSFX");
+        }
+        else
+        {
+            SFXVolume = 1f;
+            PlayerPrefs.SetFloat("volumenSFX", SFXVolume);
+        }
 
         instance = this;
 
@@ -63,6 +88,14 @@ public class AudioManager : MonoBehaviour
 
         eventEmitters = new List<StudioEventEmitter>();
     }
+
+    private void Start()
+    {
+        masterVolume = PlayerPrefs.GetFloat("volumenMaster");
+        musicVolume = PlayerPrefs.GetFloat("volumenMusica");
+        SFXVolume = PlayerPrefs.GetFloat("volumenSFX");
+    }
+
 
     private void Update()
     {

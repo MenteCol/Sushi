@@ -13,6 +13,7 @@ public class MenuInicial : MonoBehaviour
     public GameObject menuInicial;
     public GameObject menuOpciones;
     public GameObject menuCreditos;
+    public GameObject menuRules;
 
     [Header("Objetos Opciones")]
     public GameObject menuControles;
@@ -43,6 +44,7 @@ public class MenuInicial : MonoBehaviour
         menuInicial.SetActive(false);
         menuOpciones.SetActive(true);
         menuCreditos.SetActive(false);
+        menuRules.SetActive(false);
         MostrarLog("Se abrió el menú de opciones.");
     }
 
@@ -51,7 +53,17 @@ public class MenuInicial : MonoBehaviour
         menuInicial.SetActive(false);
         menuOpciones.SetActive(false);
         menuCreditos.SetActive(true);
+        menuRules.SetActive(false);
         MostrarLog("Se abrió el menú de créditos.");
+    }
+
+    public void AbrirMenuDaRules()
+    {
+        menuInicial.SetActive(false);
+        menuOpciones.SetActive(false);
+        menuCreditos.SetActive(false);
+        menuRules.SetActive(true);
+        MostrarLog("Se abrió el menú de Las Rules.");
     }
 
     public void AbrirMenuInicial() // Volver
@@ -59,6 +71,7 @@ public class MenuInicial : MonoBehaviour
         menuInicial.SetActive(true);
         menuOpciones.SetActive(false);
         menuCreditos.SetActive(false);
+        menuRules.SetActive(false);
         //        
         MostrarLog("Se abrió el menú inicial.");
     }

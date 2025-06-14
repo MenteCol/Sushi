@@ -3,15 +3,20 @@ using UnityEngine;
 
 public class Controlador_Banda : MonoBehaviour
 {
-    [Header("Instancia Banda")]
-    [SerializeField] private GameObject prefabBanda;
+    [Header("Instancia Banda Collider")]
+    [SerializeField] private GameObject prefabBandaCollider;
     [SerializeField] private Transform inicioBanda;
+    [SerializeField] private Transform finalBanda;
+
+    [Header("Instancia Banda Asset")]
+    [SerializeField] private GameObject prefabBandaAsset;
+    [SerializeField] private Transform inicioBandaAsset;
+    [SerializeField] private Transform finalBandaAsset;
 
     [Header("Movimiento Banda")]
-    public List<GameObject> bandas = new List<GameObject>();
-
-    [SerializeField] private Transform finalBanda;
-    public float velocidadBanda = 5f;
+    public List<GameObject> bandasCollider = new List<GameObject>();
+    public List<GameObject> bandasAsset = new List<GameObject>();
+    public float velocidadBandas = 5f;
 
     [Header("Referencias")]
     public Controlador_Fases controladorFases;
@@ -20,81 +25,101 @@ public class Controlador_Banda : MonoBehaviour
     void Start()
     {
         controladorFases = GameObject.Find("Controlador_Fases").GetComponent<Controlador_Fases>();
-        ActualizarListaBandas();
+        ActualizarListaBandasCollider();
     }
 
     void Update()
     {
-        ActualizarListaBandas(); // Mantiene la lista sincronizada
-        MoverBandas(); // Mueve las bandas en cada frame
+        ActualizarListaBandasCollider();
+        ActualizarListaBandasAsset();
 
-        // Debug.Log("[Controlador_Banda] Bandas activas: " + bandas.Count);
+        MoverBandasCollider();
+        MoverBandasAsset();
     }
 
-    public void InstanciaBanda()
+    public void InstanciaBandaCollider()
     {
-        GameObject nuevaBanda = Instantiate(prefabBanda, inicioBanda.position, Quaternion.identity);
-        bandas.Add(nuevaBanda); // Agregamos la nueva banda a la lista
+        GameObject nuevaBanda = Instantiate(prefabBandaCollider, inicioBanda.position, Quaternion.identity);
+        bandasCollider.Add(nuevaBanda);
     }
 
-    private void MoverBandas()
+    public void InstanciaBandaAsset()
     {
-        //for (int i = bandas.Count - 1; i >= 0; i--) // Recorremos de atrás hacia adelante para eliminar sin errores
-        //{
-        //    if (bandas[i] != null)
-        //    {
-        //        bandas[i].transform.position = Vector3.MoveTowards(
-        //            bandas[i].transform.position,
-        //            finalBanda.position,
-        //            velocidadBanda * Time.deltaTime
-        //        );
+        GameObject nuevaBanda = Instantiate(prefabBandaAsset, inicioBandaAsset.position, Quaternion.identity);
+        bandasAsset.Add(nuevaBanda);
+    }
 
-        //        // Si la banda llegó al destino, se elimina
-        //        if (Vector3.Distance(bandas[i].transform.position, finalBanda.position) < 0.1f)
-        //        {
-        //            Destroy(bandas[i]);
-        //            InstanciaBanda();
-        //            bandas.RemoveAt(i);
-        //        }
-        //    }
-        //}
-
-        for (int i = bandas.Count - 1; i >= 0; i--)
+    private void MoverBandasCollider()
+    {
+        for (int i = bandasCollider.Count - 1; i >= 0; i--)
         {
-            if (bandas[i] != null)
+            if (bandasCollider[i] != null)
             {
-                bandas[i].transform.position = Vector3.MoveTowards(
-                    bandas[i].transform.position,
+                bandasCollider[i].transform.position = Vector3.MoveTowards(
+                    bandasCollider[i].transform.position,
                     finalBanda.position,
                     controladorFases.velocidadBanda * Time.deltaTime
                 );
                                 
-                if (Vector3.Distance(bandas[i].transform.position, finalBanda.position) < 0.1f)
+                if (Vector3.Distance(bandasCollider[i].transform.position, finalBanda.position) < 0.0001f)
                 {
-                    Destroy(bandas[i]);
-                    InstanciaBanda();
-                    bandas.RemoveAt(i);
+                    Destroy(bandasCollider[i]);
+                    InstanciaBandaCollider();
+                    bandasCollider.RemoveAt(i);
                 }
             }
         }
-
     }
 
-    private void ActualizarListaBandas()
+    private void MoverBandasAsset()
     {
-        // Buscar todas las bandas activas en la escena
-        GameObject[] objetosConTag = GameObject.FindGameObjectsWithTag("Banda");
-
-        // Limpiar la lista eliminando objetos destruidos
-        bandas.RemoveAll(b => b == null);
-
-        // Agregar nuevas bandas si aún no están en la lista
-        foreach (GameObject obj in objetosConTag)
+        for (int i = bandasAsset.Count - 1; i >= 0; i--)
         {
-            if (!bandas.Contains(obj))
+            if (bandasAsset[i] != null)
             {
-                bandas.Add(obj);
+                bandasAsset[i].transform.position = Vector3.MoveTowards(
+                    bandasAsset[i].transform.position,
+                    finalBandaAsset.position,
+                    controladorFases.velocidadBanda * Time.deltaTime
+                );
+
+                if (Vector3.Distance(bandasAsset[i].transform.position, finalBandaAsset.position) < 0.0001f)
+                {
+                    Destroy(bandasAsset[i]);
+                    InstanciaBandaAsset();
+                    bandasAsset.RemoveAt(i);
+                }
             }
         }
     }
+
+
+    private void ActualizarListaBandasCollider()
+    {        
+        GameObject[] objetosConTag = GameObject.FindGameObjectsWithTag("Banda");     
+        bandasCollider.RemoveAll(b => b == null);
+                
+        foreach (GameObject obj in objetosConTag)
+        {
+            if (!bandasCollider.Contains(obj))
+            {
+                bandasCollider.Add(obj);
+            }
+        }
+    }
+
+    private void ActualizarListaBandasAsset()
+    {
+        GameObject[] objetosConTag = GameObject.FindGameObjectsWithTag("BandaAsset");
+        bandasAsset.RemoveAll(b => b == null);
+
+        foreach (GameObject obj in objetosConTag)
+        {
+            if (!bandasAsset.Contains(obj))
+            {
+                bandasAsset.Add(obj);
+            }
+        }
+    }
+
 }
