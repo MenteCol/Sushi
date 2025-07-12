@@ -24,6 +24,7 @@ public class ClickObjetosPuntos : MonoBehaviour
     [SerializeField] private bool hacerRaycast = true;
     [SerializeField] private float distanciaRaycast = 2f;
 
+    public GameObject prefabParticula;
     private bool mostrarGizmo = false;
     private Transform bandaDetectada = null;
 
@@ -102,7 +103,7 @@ public class ClickObjetosPuntos : MonoBehaviour
         }
 
         ConfigurarValoresPorID();
-        EjecutarAccionPrincipal();
+        EjecutarAccionPrincipal();        
         DestruirObjeto();
     }
 
@@ -118,6 +119,8 @@ public class ClickObjetosPuntos : MonoBehaviour
 
     private void ConfigurarValoresPorID()
     {
+        TomarTransformParticula();
+
         switch (ID)
         {
             case 1:
@@ -195,6 +198,12 @@ public class ClickObjetosPuntos : MonoBehaviour
     private void QuitarRaycast()
     {
         hacerRaycast = false;
+    }
+
+
+    private void TomarTransformParticula()
+    {
+        controladorPuntos.MostrarParticula(this.transform);
     }
 
     public void AsignarID(int nuevoID) => ID = nuevoID;

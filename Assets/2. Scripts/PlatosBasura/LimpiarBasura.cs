@@ -77,7 +77,7 @@ public class LimpiarBasura : MonoBehaviour
                 if (Physics.Raycast(ray, out RaycastHit hit) && hit.transform == transform)
                 {
                     estaPresionando = true;
-                    if (!reproduciendoEvento)
+                    if (!reproduciendoEvento && contadorLimpiar > 0)
                     {
                         imagenEscoba.SetActive(true);
                         AudioImp.Instance.Reproducir(eventoPlay);
@@ -113,7 +113,7 @@ public class LimpiarBasura : MonoBehaviour
                 if (Physics.Raycast(ray, out RaycastHit hit) && hit.transform == transform)
                 {
                     estaPresionando = true;
-                    if (!reproduciendoEvento)
+                    if (!reproduciendoEvento && contadorLimpiar > 0)
                     {
                         imagenEscoba.SetActive(true);
                         AudioImp.Instance.Reproducir(eventoPlay);

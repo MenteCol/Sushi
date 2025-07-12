@@ -55,6 +55,8 @@ public class Controlador_Puntos : MonoBehaviour
     [SerializeField] private Controlador_Banda controladorBanda;
     #endregion
 
+    [SerializeField] private GameObject prefabParticula;
+
     void Start()
     {
         controladorFases = GameObject.Find("Controlador_Fases").GetComponent<Controlador_Fases>();
@@ -276,5 +278,10 @@ public class Controlador_Puntos : MonoBehaviour
         {
             llenuraSlider.value = llenura;
         }
+    }
+
+    public void MostrarParticula(Transform ubicacionClick)
+    {
+        GameObject particula = Instantiate(prefabParticula, ubicacionClick.position, Quaternion.identity);
     }
 }

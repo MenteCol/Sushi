@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2056015127237518663
+--- !u!1 &4245339138392523381
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,46 +8,46 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4488747616887924676}
-  - component: {fileID: 710730092755132769}
-  - component: {fileID: 1338775984390000251}
+  - component: {fileID: 3272448226440628507}
+  - component: {fileID: 207109161748441568}
+  - component: {fileID: 1978557453319504682}
   m_Layer: 0
-  m_Name: SushiBoost1
+  m_Name: PrefabBoost1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4488747616887924676
+--- !u!4 &3272448226440628507
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2056015127237518663}
+  m_GameObject: {fileID: 4245339138392523381}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -0.4, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.042, y: -0.396, z: -0.009}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1774204349123800042}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
---- !u!33 &710730092755132769
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &207109161748441568
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2056015127237518663}
-  m_Mesh: {fileID: 8809132920759009766, guid: 63747b090bed8ef43a99462c6eb659f0, type: 3}
---- !u!23 &1338775984390000251
+  m_GameObject: {fileID: 4245339138392523381}
+  m_Mesh: {fileID: 2267963405605770342, guid: 17c65ae34fbdd1b4bb5ae17cf6408e6d, type: 3}
+--- !u!23 &1978557453319504682
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2056015127237518663}
+  m_GameObject: {fileID: 4245339138392523381}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -64,7 +64,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 221416892572921833, guid: 63747b090bed8ef43a99462c6eb659f0, type: 3}
+  - {fileID: -4196836546482129832, guid: 17c65ae34fbdd1b4bb5ae17cf6408e6d, type: 3}
+  - {fileID: 2505591814088576187, guid: 17c65ae34fbdd1b4bb5ae17cf6408e6d, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -120,7 +121,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4488747616887924676}
+  - {fileID: 3272448226440628507}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7999669394403693179
@@ -209,16 +210,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2ff07db63c2738478519e0dd76d343b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  depuracion: 0
   ID: 0
   multiplicadorLlenura: 1
   puntosComida: 0
   puntosLlenura: 0
   puntosMalestar: 0
+  audioComer: cBoost
+  audioNoPuede: Equivocado
+  hacerRaycast: 1
+  distanciaRaycast: 2
+  prefabParticula: {fileID: 0}
   controladorPuntos: {fileID: 0}
   instanciarBasura: {fileID: 0}
   gameManager: {fileID: 0}
-  audioComer: cBoost
-  audioNoPuede: Equivocado
+  controladorFases: {fileID: 0}
 --- !u!54 &3669435947365303218
 Rigidbody:
   m_ObjectHideFlags: 0
