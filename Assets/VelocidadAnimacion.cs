@@ -13,7 +13,8 @@ public class VelocidadAnimacion : MonoBehaviour
     [Header("Animacion")]
     public float velocidadAnimacionMin = 1.0f;
     public float velocidadAnimacionMax = 3.0f;
-    public Animator animator;
+    public Animator animatorBoton;
+    public Animator animatorPanza;
 
     [Header("Referencias")]
     public InstanciarBasura instanciarBasura;
@@ -28,7 +29,7 @@ public class VelocidadAnimacion : MonoBehaviour
     void Start()
     {
         materialBoton = botonBasura.GetComponent<MeshRenderer>().material;
-        animator = botonBasura.GetComponent<Animator>();
+        animatorBoton = botonBasura.GetComponent<Animator>();
 
         if (depuracion)
             Debug.Log($"{gameObject.name}: Inicializacion de referencias de boton y animador.");
@@ -48,9 +49,12 @@ public class VelocidadAnimacion : MonoBehaviour
                 
         float velocidad = Mathf.Lerp(velocidadAnimacionMin, velocidadAnimacionMax, t);
 
-        if (animator != null)
-            animator.speed = velocidad;
-                
+        if (animatorBoton != null)
+            animatorBoton.speed = velocidad;
+
+        if (animatorPanza != null)
+            animatorPanza.speed = velocidad;
+
         normal = contador <= (limite - 2);
 
         presionado = limpiarBasura.estaPresionando;
@@ -59,12 +63,12 @@ public class VelocidadAnimacion : MonoBehaviour
         { 
             AudioImp.Instance.Reproducir("click");            
             reproducirSonido = true;
-            animator.SetBool("Presionado", true);
+            animatorBoton.SetBool("Presionado", true);
         }
         else if (!presionado)
         {
             reproducirSonido = false;
-            animator.SetBool("Presionado", false);
+            animatorBoton.SetBool("Presionado", false);
         }        
 
         if (depuracion)

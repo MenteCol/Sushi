@@ -43,6 +43,8 @@ public class CortePlatos : MonoBehaviour, IPointerDownHandler, IDragHandler, IPo
 
     [Header("Varios")]
     [SerializeField] private RectTransform lineaUI;
+    public bool primeraVez = false;
+    public GameObject tutoCorte;
 
     [Header("Proporción de escala de la línea UI")]
     [SerializeField, Range(0.1f, 5f)] private float proporcionEscalaLinea = 1.0f;
@@ -98,6 +100,12 @@ public class CortePlatos : MonoBehaviour, IPointerDownHandler, IDragHandler, IPo
     private void Update()
     {
         drawArea = new Rect(x, y, w, h);
+
+        if (!primeraVez && controladorInstancias.areaActivada)
+        { 
+            tutoCorte.SetActive(true);
+            primeraVez = true;
+        }
 
 #if UNITY_ANDROID || UNITY_IOS
         foreach (var touch in Touch.activeTouches)
@@ -237,6 +245,7 @@ public class CortePlatos : MonoBehaviour, IPointerDownHandler, IDragHandler, IPo
 
     public void CortePlatosAccion()
     {
+        if (tutoCorte.activeSelf) tutoCorte.SetActive(false);
         MostrarLineaUI();
         controladorInstancias.DestruirPlatos();
         AudioImp.Instance.Reproducir(eventoCorte);

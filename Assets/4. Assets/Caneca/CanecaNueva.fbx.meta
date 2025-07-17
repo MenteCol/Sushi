@@ -3,7 +3,52 @@ guid: f68b722b9db8a6a42bfe6c6999e320c5
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: CanecaBase
+    second: {fileID: 2100000, guid: c01e4089e4a022e4fba268513b15f4d8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cascabel
+    second: {fileID: 2100000, guid: c4f195c7cec12ad4c8ef9faae47a7fb7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Collar
+    second: {fileID: 2100000, guid: 695b6355ff6bc1247b4e0d80a445f379, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Lengua
+    second: {fileID: 2100000, guid: 98543f0b3c3d9e04992ba1d13e6df71b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Ojos
+    second: {fileID: 2100000, guid: e476bd61951548a49a91435b778b37c0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Orejas
+    second: {fileID: 2100000, guid: cce1d6ff6e3b5d1428bb0ea4ff6ecb67, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TapaBot
+    second: {fileID: 2100000, guid: 80e4b6a739f819e46ba68f41177f48f2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TapaTop
+    second: {fileID: 2100000, guid: 3c0185de3778baf4ea7c4d9a2d9ecf91, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Trompa
+    second: {fileID: 2100000, guid: 250485575987b1d4cbede45dc9d5ac3a, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

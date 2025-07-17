@@ -37,6 +37,7 @@ public class GameOver_Controller : MonoBehaviour
     public Controlador_Puntos controladorPuntos;
     public Controlador_Fases controladorFases;
     public MovimientoStrike movimientoStrike;
+    public Controlador_Combos controladorCombos;
     #endregion
 
     void Start()
@@ -108,7 +109,7 @@ public class GameOver_Controller : MonoBehaviour
         {
             if (!flagLlenura)
             {
-                SumarStrikes();
+                SumarStrikes();                
                 flagLlenura = true;
             }
         }
@@ -176,6 +177,8 @@ public class GameOver_Controller : MonoBehaviour
 
     public void SumarStrikes()
     {
+        controladorPuntos.combo = 0;
+        controladorCombos.CortarCombo();
         movimientoStrike.AplicarFuerzaAleatoria();
         AudioImp.Instance.Reproducir("gatoStrikes");
         Controlador_EmotesT.Instance.ReproducirEmoji("Bravo");

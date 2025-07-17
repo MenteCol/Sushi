@@ -29,7 +29,7 @@ public class Controlador_Instancias : MonoBehaviour
     [SerializeField] private GameObject platosPrefab;
     [SerializeField] private Transform origenInstanciaPlatos;
     public GameObject panelCorte;
-    public GameObject panelRecuadro;
+    public GameObject panelRecuadro;    
     public List<GameObject> platosInstanciados = new List<GameObject>();
 
     [Header("Forma Instanciar Comida")]

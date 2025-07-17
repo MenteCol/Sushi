@@ -11,12 +11,14 @@ public class InstanciarBasura : MonoBehaviour
     [Header("Variables")]
     public bool basuraLlena = false;
     public bool sonidoAlerta;
+    public bool primeraVez = true;  
     public int contadorBasura = 0;
     public float contStrikeNoComer;
     public float timerStrikeBasura_i;
     public float timerStrikeBasura;
     public string eventoTirarBasura;
-    public GameObject imagenBoton;
+    public GameObject imagenPata;
+    public GameObject imagenLineas;
 
     [Header("Referencias")]
     public GameManager gameManager;
@@ -92,7 +94,14 @@ public class InstanciarBasura : MonoBehaviour
         if (contadorBasura >= gameManager.valorLimiteLlena - 2)
         {
             Controlador_EmotesT.Instance.ReproducirEmoji("Bravo");
-            imagenBoton.SetActive(true);
+
+            if (primeraVez)
+            {
+                imagenPata.SetActive(true);
+                imagenLineas.SetActive(true);
+                primeraVez = false;
+            }
+
 
             if (!sonidoAlerta)
             {
@@ -103,14 +112,16 @@ public class InstanciarBasura : MonoBehaviour
         else
         {
             sonidoAlerta = false;
-            imagenBoton.SetActive(false);
+            imagenPata.SetActive(false);
+            imagenLineas.SetActive(false);
         }
 
         if (limpiarBasura.estaPresionando)
         {
             if (depuracion)
                 Debug.Log($"{gameObject.name}: Ocultar Boton al presionar la basura");
-            imagenBoton.SetActive(false);
+            imagenPata.SetActive(false);
+            imagenLineas.SetActive(false);
         }
 
         if (contStrikeNoComer > 0)
@@ -147,33 +158,21 @@ public class InstanciarBasura : MonoBehaviour
             timerStrikeBasura = timerStrikeBasura_i;
 
             AudioImp.Instance.Reproducir(eventoTirarBasura);
-
-            // Reducir escala del objeto original
-            other.transform.localScale = other.transform.localScale * 1f;
-            other.GetComponent<BoxCollider>().size = Vector3.one * 0.6f;
-
-            // Instanciar en disparo            
-            //objetosBasura.Add(other.gameObject);
-
+            
             DispararBasura(other.gameObject);
 
-            // Mover el objeto original a un punto de basura (mantener lógica actual)
-            // other.transform.position = puntoBasura[indiceAleatorio].position;
             Destroy(other.gameObject);
-
-
         }
     }
 
-    /// <summary>
-    /// Instancia y dispara el objeto basura desde puntoDeDisparo con fuerza aleatoria entre fuerzaMin y fuerzaMax
-    /// </summary>
-    /// <param name="objeto">El objeto a instanciar y disparar</param>
     private void DispararBasura(GameObject objeto)
     {
         if (puntoDeDisparo != null)
         {
             GameObject basuraInstanciada = Instantiate(objeto, puntoDeDisparo.position, Quaternion.identity);
+            basuraInstanciada.transform.localScale = new Vector3(1f, 1f, 1f) * 0.8f;            
+            basuraInstanciada.name = "(Basura)";
+
             objetosBasura.Add(basuraInstanciada);
 
             Rigidbody rb = basuraInstanciada.GetComponent<Rigidbody>();
@@ -188,7 +187,6 @@ public class InstanciarBasura : MonoBehaviour
             rb.AddForce(fuerza, ForceMode.Impulse);
 
             // --- NUEVO: Aplicar torque aleatorio para rotación ---
-            // Define un rango de torque para cada eje (puedes ajustar estos valores)
             float torqueX = Random.Range(-1f, 1f);
             float torqueY = Random.Range(-1f, 1f);
             float torqueZ = Random.Range(-1f, 1f);
@@ -204,7 +202,6 @@ public class InstanciarBasura : MonoBehaviour
                 Debug.LogWarning("puntoDeDisparo no está asignado en InstanciarBasura");
         }
     }
-
 
     public void BorrarBasura()
     {

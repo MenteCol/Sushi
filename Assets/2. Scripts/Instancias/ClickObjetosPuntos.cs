@@ -23,8 +23,7 @@ public class ClickObjetosPuntos : MonoBehaviour
     [Header("Raycast")]
     [SerializeField] private bool hacerRaycast = true;
     [SerializeField] private float distanciaRaycast = 2f;
-
-    public GameObject prefabParticula;
+        
     private bool mostrarGizmo = false;
     private Transform bandaDetectada = null;
 
@@ -73,12 +72,6 @@ public class ClickObjetosPuntos : MonoBehaviour
         }
     }
 
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Banda"))
-            transform.SetParent(null);
-    }
-
     private void ValidarReferencias()
     {
         if (controladorFases == null && depuracion)
@@ -125,12 +118,12 @@ public class ClickObjetosPuntos : MonoBehaviour
         {
             case 1:
                 puntosComida = 1;
-                puntosLlenura = 0.1f;
+                puntosLlenura = gameManager.valorBuenaLlenura;
                 puntosMalestar = 0;
                 break;
             case 2:
                 puntosComida = 1;
-                puntosLlenura = 0.2f;
+                puntosLlenura = gameManager.valorMalaLlenura;
                 puntosMalestar = 1;
                 break;
             case 3:

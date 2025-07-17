@@ -30,6 +30,8 @@ public class Controlador_Puntos : MonoBehaviour
     public bool estaEnfermo;
     public bool estaVomitando;
     public int malestar = 0;
+    public Animator animatorMalestar;
+    public Animator animatorMalestarG;
 
     [Header("Contadores Enfermo")]
     public float actualTimerEnfermo;
@@ -231,6 +233,9 @@ public class Controlador_Puntos : MonoBehaviour
 
     public void ContadorMalestar()
     {
+        animatorMalestar.SetInteger("ValorMalestar", malestar);
+        animatorMalestarG.SetInteger("ValorMalestar", malestar);
+
         if (malestar > 0 && malestar < gameManager.valorMalestarMaximo)
         {
             if (actualTimerAcumulacion >= 0)
@@ -271,7 +276,7 @@ public class Controlador_Puntos : MonoBehaviour
     {
         if (puntajeText != null)
         {
-            puntajeText.text = puntaje.ToString("D2");
+            puntajeText.text = puntaje.ToString("D3");
         }
 
         if (llenuraSlider != null)

@@ -21,6 +21,7 @@ public class Controlador_Combos : MonoBehaviour
     public int ultimoCombo = 0;
 
     private Coroutine animacionEscala;
+
     private Vector3 escalaOriginal = Vector3.one;
     private Vector3 escalaOculta = Vector3.zero;
 
@@ -82,6 +83,9 @@ public class Controlador_Combos : MonoBehaviour
 
     public void MostrarCombo()
     {
+        if (controladorPuntos.combo < 1)
+            return;
+
         if (animacionEscala != null)
             StopCoroutine(animacionEscala);
 
@@ -95,6 +99,20 @@ public class Controlador_Combos : MonoBehaviour
             StopCoroutine(animacionEscala);
 
         animacionEscala = StartCoroutine(EsconderYDesactivar());
+    }
+
+    public void CortarCombo()
+    {
+        if (animacionEscala != null)
+            StopCoroutine(animacionEscala);
+
+        animacionEscala = StartCoroutine(CortarComboCorrutina());
+    }
+
+    private IEnumerator CortarComboCorrutina()
+    {        
+        Debug.Log($"{gameObject.name}: Corrutina Cortar Combo / Animar Corte COMBO");        
+        yield return Tweening.SetScale(panelCombos, escalaOculta, 1);
     }
 
     private IEnumerator EsconderYDesactivar()

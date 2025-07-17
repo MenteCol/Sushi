@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     [Header("* Valores Instancias Comidas")]
     public float tiempoMinInstancias;
     public float reduccionTiempoInstancia;
+    public float valorBuenaLlenura;
+    public float valorMalaLlenura;
 
     [Header("* Valores Velocidad Banda")]
     public float velocidadMaxBanda;
