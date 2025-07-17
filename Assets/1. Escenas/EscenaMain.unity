@@ -20047,6 +20047,7 @@ GameObject:
   - component: {fileID: 1904458766}
   - component: {fileID: 1904458765}
   - component: {fileID: 1904458764}
+  - component: {fileID: 1904458768}
   m_Layer: 0
   m_Name: Marcador_BasuraPeso
   m_TagString: Untagged
@@ -20064,7 +20065,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.95, z: 0}
-  m_LocalScale: {x: 0.625, y: 0.05, z: 0.625}
+  m_LocalScale: {x: 0.8, y: 0.05, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1699873951}
@@ -20159,6 +20160,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 312995734}
   instanciarBasura: {fileID: 268663746}
+  animator: {fileID: 0}
   valorSlider: 0.05
   valorBasura: 0
   valorLimite: 0
@@ -20166,6 +20168,28 @@ MonoBehaviour:
   minY: 0.05
   maxY: 0.95
   velocidadSuavizado: 5
+--- !u!95 &1904458768
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1904458762}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3319a87e6add3e947868edcddcff6556, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1909294007
 GameObject:
   m_ObjectHideFlags: 0

@@ -149,15 +149,10 @@ public class GameOver_Controller : MonoBehaviour
         {
             timerCondicion1 -= Time.deltaTime;
 
-            if (!flagBasura)
+            if (!flagBasura && timerCondicion1 <= 0)
             {
                 SumarStrikes();
                 flagBasura = true;
-            }
-
-            if (timerCondicion1 <= 0)
-            {
-                menuGameOver.MostrarGameOver();
             }
         }
         else

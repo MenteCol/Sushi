@@ -4,6 +4,7 @@ public class MarcadorEspacioBasura : MonoBehaviour
 {
     public GameManager gameManager;             // Asigna tu objeto GameManager
     public InstanciarBasura instanciarBasura;   // Asigna tu objeto InstanciarBasura
+    public Animator animator;               // Asigna tu objeto Animator    
 
     [Range(0f, 1f)]
     public float valorSlider = 0.05f;              // Se actualizará automáticamente
@@ -25,14 +26,18 @@ public class MarcadorEspacioBasura : MonoBehaviour
     {
         escalaYSuave = transform.localScale.y;
         posicionYSuave = transform.localPosition.y;
+        animator = GetComponent<Animator>();
     }
 
     void Update()
-    {
+    {      
+
         valorBasura = instanciarBasura.contadorBasura;
         valorLimite = gameManager.valorLimiteLlena;
 
         relacionBasura = valorBasura / valorLimite;
+
+        animator.SetFloat("RelacionBasura", relacionBasura);
 
         if (valorBasura <= 0)
         {
